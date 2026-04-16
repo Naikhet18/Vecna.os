@@ -1,0 +1,30 @@
+/* Smooth, cinematic transition for the entire page */
+html {
+    transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.vecna-dark-mode {
+    filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(1.05) !important;
+    background-color: #111 !important;
+}
+
+/* Ensure media smoothly transitions back to normal colors */
+.vecna-dark-mode img, 
+.vecna-dark-mode video, 
+.vecna-dark-mode canvas {
+    transition: filter 0.6s ease-in-out !important;
+    filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Aesthetic Stealth Highlight (Glowing Underline instead of a box) */
+.vecna-target {
+    border-bottom: 2px solid rgba(0, 255, 204, 0.5) !important;
+    box-shadow: 0 4px 10px -5px rgba(0, 255, 204, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.vecna-target:focus {
+    border-bottom: 2px solid #00ffcc !important;
+    box-shadow: 0 6px 15px -3px rgba(0, 255, 204, 0.6) !important;
+    outline: none !important;
+}
