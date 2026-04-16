@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { width: 340px; background: rgba(10, 10, 12, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; margin: 0; border: 1px solid rgba(0, 255, 204, 0.2); }
+        
+        .logo-container { display: flex; justify-content: center; margin-bottom: 15px; }
+        .logo-v { width: 40px; height: 40px; position: relative; animation: pulse 2s infinite; }
+        .logo-v::before, .logo-v::after { content: ''; position: absolute; width: 6px; height: 35px; background: #00ffcc; border-radius: 3px; top: 0; box-shadow: 0 0 15px #00ffcc; }
+        .logo-v::before { left: 10px; transform: rotate(-35deg); }
+        .logo-v::after { right: 10px; transform: rotate(35deg); }
+        @keyframes pulse { 0% { filter: drop-shadow(0 0 2px #00ffcc); } 50% { filter: drop-shadow(0 0 12px #00ffcc); } 100% { filter: drop-shadow(0 0 2px #00ffcc); } }
+
+        .header { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 25px; letter-spacing: 5px; color: #fff; text-transform: uppercase; }
+        .header span { color: #00ffcc; font-weight: 300; }
+        
+        .switch-container { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.5) 100%); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.1); border-radius: 24px; transition: .4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #fff; border-radius: 50%; transition: .4s cubic-bezier(0.4, 0, 0.2, 1); }
+        input:checked + .slider { background-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.5); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .btn { width: 100%; padding: 14px; margin-top: 12px; background: rgba(0, 255, 204, 0.05); border: 1px solid rgba(0, 255, 204, 0.3); color: #00ffcc; cursor: pointer; font-weight: 700; border-radius: 8px; transition: all 0.3s ease; letter-spacing: 1px; text-transform: uppercase; font-size: 11px; }
+        .btn:hover { background: rgba(0, 255, 204, 0.2); box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); transform: translateY(-2px); }
+        .btn-purge { background: rgba(255, 0, 60, 0.05); border-color: rgba(255, 0, 60, 0.3); color: #ff003c; }
+        .btn-purge:hover { background: rgba(255, 0, 60, 0.2); box-shadow: 0 0 20px rgba(255, 0, 60, 0.3); }
+
+        /* The Laser Scanner Vault */
+        #vault-display { display: none; margin-top: 25px; position: relative; overflow: hidden; padding-top: 10px; }
+        .scanner-line { width: 100%; height: 2px; background: #00ffcc; position: absolute; top: 0; left: 0; box-shadow: 0 0 15px 2px #00ffcc; animation: scan 3s infinite linear; opacity: 0; display: none; z-index: 10; }
+        @keyframes scan { 0% { top: 0; opacity: 1; } 90% { top: 100%; opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+        .log-entry { background: linear-gradient(90deg, rgba(255,0,60,0.15) 0%, rgba(0,0,0,0.9) 100%); padding: 14px; margin-bottom: 12px; border-radius: 6px; border-left: 4px solid #ff003c; font-size: 11px; word-break: break-all; color: #d0d0d0; font-family: 'Courier New', monospace; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
+        .log-entry.visible { opacity: 1; transform: translateY(0); }
+        .log-entry span { color: #00ffcc; font-weight: bold; display: inline-block; width: 65px; }
+        
+        .glitch-text { animation: glitch 0.5s linear infinite; color: #ff003c; font-family: monospace; text-align: center; margin: 20px 0; font-size: 14px; letter-spacing: 2px; }
+        @keyframes glitch { 0% { opacity: 1; transform: translateX(0); } 20% { transform: translateX(-2px); } 40% { opacity: 0.8; transform: translateX(2px); } 60% { filter: hue-rotate(90deg); } 80% { transform: translateX(-1px); } 100% { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="logo-v"></div>
+    </div>
+    <div class="header">VECNA<span>.OS</span></div>
+    
+    <div class="switch-container">
+        <span style="font-weight: 600; letter-spacing: 1px;">System Armed (C2)</span>
+        <label class="switch">
+            <input type="checkbox" id="dark-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div id="main-menu">
+        <button class="btn" id="btn-vault">Access Core Vault</button>
+        <button class="btn btn-purge" id="btn-purge">Purge Intelligence</button>
+    </div>
+
+    <div id="vault-display">
+        <div class="scanner-line" id="scanner"></div>
+        <div style="color: #ff003c; margin-bottom: 15px; font-weight: 800; letter-spacing: 2px; font-size: 11px; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; z-index: 5; position: relative;">[ COMPROMISED ASSETS ]</div>
+        <div id="vault-logs" style="position: relative; z-index: 5;"></div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
